@@ -1,0 +1,36 @@
+library(sbo)
+twitter <- readLines(con <- file("C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.twitter.txt"), encoding = "UTF-8", skipNul = TRUE)
+
+co_twitter_tidy_en="C:\\Users\\joshu\\Documents\\Rcoursera\\co_twitter_tidy_en.txt"
+co_blogs_tidy_en="C:\\Users\\joshu\\Documents\\Rcoursera\\co_blogs_tidy_en.txt"
+co_news_tidy_en="C:\\Users\\joshu\\Documents\\Rcoursera\\co_news_tidy_en.txt"
+co_twitter_en = "C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.twitter.txt"
+co_blogs_en = "C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.blogs.txt"
+co_news_en = "C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.news.txt"
+co_3gram_en="C:\\Users\\joshu\\Documents\\Rcoursera\\co_3gram_en.txt"
+df_twitter <- readRDS(co_twitter_tidy_en)
+df_news <- readRDS(co_news_tidy_en)
+df_blogs <- readRDS(co_blogs_tidy_en)
+twitter <- readLines(con <- file("C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.twitter.txt"), encoding = "UTF-8", skipNul = TRUE)
+close(con)
+news <- readLines(con <- file("C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.news.txt"), encoding = "UTF-8", skipNul = TRUE)
+close(con)
+blogs <- readLines(con <- file("C:\\Users\\joshu\\Documents\\Rcoursera\\Coursera-SwiftKey\\final\\en_US\\en_US.blogs.txt"), encoding = "UTF-8", skipNul = TRUE)
+close(con)
+lines <- c(twitter, blogs, news)
+psample<-sample (lines, size=length(lines)*0.2)
+## First step: Take the Spanish udpipe model and annotate the text. Note: this takes about 3 minutes
+
+p <- sbo_predictor(object = psample
+                   , # preloaded example dataset
+                   N = 3, # Train a 3-gram model
+                   dict = target ~ 0.5, # cover 75% of training corpus
+                   .preprocess = sbo::preprocess, # Preprocessing transformation 
+                   EOS = ".?!:;", # End-Of-Sentence tokens
+                   lambda = 0.4, # Back-off penalization in SBO algorithm
+                   L = 6L, # Number of predictions for input
+                   filtered = "<UNK>" # Exclude the <UNK> token from predictions
+)
+keywords="C:\\Users\\joshu\\Documents\\Rcoursera\\corpuskeywords.txt"
+
+predict(p, input)
